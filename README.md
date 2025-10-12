@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# AutoCard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
+## AI-powered flashcards with gamification for smarter learning.
+Upload PDFs or PowerPoints, auto-generate flashcards with AI, and share them in a global library.
 
-## Available Scripts
+---
+## Tech stack
+- **Frontend**: React, Bootstrap
+- **Storage**: Firebase firestore
+- **Authentication** Firebase authentication
+- **AI**: Firebase AI Logic
 
-In the project directory, you can run:
+---
+## Setup
 
-### `npm start`
+When setting up the project, ensure you have Node.js and npm installed. Then, follow these steps:
+1. Clone the repository:
+   ```bash
+   git clone
+   
+2. Set up the environment variables. Create a `.env` file in the root directory and add the necessary Firebase configuration details.
+The file should be formatted like the provided `.env.example` file.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+How to obtain values for the environment variables:
+1. Go to the [Firebase Console](https://console.firebase.google.com/) and login with our credentials.
+2. Select the AutoCard project.
+2. Click the gear icon next to "Project Overview" and select "Project settings".
+3. Scroll down to the "Your apps" section and select AutoCard app.
+4. In the "Firebase SDK snippet" section, select "npm" to see your configuration details.
+5. Copy the configuration details and paste them into your `.env` file, replacing the placeholder values.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
+## Branching strategy
 
-### `npm test`
+**Feature branches:** ***feature/<JIRA-TAG>***
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+When starting a ticket from JIRA, create a feature branch with the JIRA tag.\
+**Example:** ***feature/MNI-123***
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Bugfix** branches: bugfix/<JIRA-TAG>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+When fixing a bug from JIRA, create a bugfix branch with the JIRA tag.\
+**Example:** ***bug/MNI-456***
