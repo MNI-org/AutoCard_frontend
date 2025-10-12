@@ -1,17 +1,14 @@
 # AutoCard
 
----
 ## AI-powered flashcards with gamification for smarter learning.
 Upload PDFs or PowerPoints, auto-generate flashcards with AI, and share them in a global library.
 
----
 ## Tech stack
 - **Frontend**: React, Bootstrap
 - **Storage**: Firebase firestore
 - **Authentication** Firebase authentication
 - **AI**: Firebase AI Logic
 
----
 ## Setup
 
 When setting up the project, ensure you have Node.js and npm installed. Then, follow these steps:
@@ -30,7 +27,6 @@ How to obtain values for the environment variables:
 4. In the "Firebase SDK snippet" section, select "npm" to see your configuration details.
 5. Copy the configuration details and paste them into your `.env` file, replacing the placeholder values.
 
----
 ## Branching strategy
 
 **Feature branches:** ***feature/<JIRA-TAG>***
@@ -43,3 +39,8 @@ When starting a ticket from JIRA, create a feature branch with the JIRA tag.\
 
 When fixing a bug from JIRA, create a bugfix branch with the JIRA tag.\
 **Example:** ***bug/MNI-456***
+
+**Merging to master:**
+- Create a pull request (PR) from your feature or bugfix branch to the master branch.
+- Ensure that at least one team member reviews and approves the PR.
+- After approval, merge the PR into the master branch.
