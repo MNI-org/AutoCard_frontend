@@ -3,15 +3,17 @@ import { AuthProvider } from "./contexts/authContext";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import CollectionEditor from "./pages/CollectionEditor";
 
 function App() {
     return (
-
         <AuthProvider>
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/editor/:id" element={<CollectionEditor/>}/>
+                    <Route path="/editor" element={<CollectionEditor/>}/>
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </Router>

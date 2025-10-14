@@ -68,8 +68,8 @@ function Login() {
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 displayName: user.displayName,
-                level:1,
-                xp:0
+                level: user.level?? 1,
+                xp: user.xp ?? 0
             }, { merge: true });
             setStatus("Logged in with Google successfully!");
             navigate("/");
