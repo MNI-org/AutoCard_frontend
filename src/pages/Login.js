@@ -26,7 +26,12 @@ function Login() {
         try {
             const userCredential = await doCreateUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
-            await setDoc(doc(db, "users", user.uid), { email: user.email });
+            await setDoc(doc(db, "users", user.uid), {
+                email: user.email,
+                // displayName: user.displayName
+                level:1,
+                xp:0
+            });
             setStatus("Account created successfully!");
             navigate("/");
         } catch (error) {
@@ -62,7 +67,9 @@ function Login() {
             // Store user in Firestore (merge: true handles both new and existing users)
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
-                displayName: user.displayName
+                displayName: user.displayName,
+                level:1,
+                xp:0
             }, { merge: true });
             setStatus("Logged in with Google successfully!");
             navigate("/");
