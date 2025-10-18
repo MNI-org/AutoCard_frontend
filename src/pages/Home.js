@@ -22,9 +22,11 @@ function Home() {
 
             {userLogged ? (
                 <div>
-                    <p>Welcome, {currentUser?.email}!</p>
+                    <p>Welcome, {currentUser?.displayName}!</p>
                     <button onClick={handleLogout}>Logout</button>
-                    <button onClick={() => navigate("/editor")}>Go to Collection Creation</button>
+                    <button onClick={() => navigate("/editor")}>Collection Creation</button>
+
+                    <button onClick={() => navigate("/collections")}>Collections</button>
                 </div>
             ) : (
                 <div>

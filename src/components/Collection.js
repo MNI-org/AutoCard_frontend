@@ -4,7 +4,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
 
-function Collections() {
+function Collection() {
     const { currentUser, userLogged } = useAuth();
     const navigate = useNavigate();
 
@@ -27,8 +27,8 @@ function Collections() {
 
 
 
-    const loadCollection = async (id) => {
-        const docRef = doc(db, "collections", id);
+    const loadCollections = async (id) => {
+        const docRef = doc(db, "collections");
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
             setCards(docSnap.data().cards);
@@ -46,11 +46,13 @@ function Collections() {
 
 
     useEffect(() => {
+
         if (id!==undefined) {
-            loadCollection(id);
+            loadCollections(id);
         }
         else
             setCreator(currentUser.uid)
+
     },[])
 
     if (!userLogged) {
@@ -73,4 +75,4 @@ function Collections() {
     );
 }
 
-export default Collections;
+export default Collection;

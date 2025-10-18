@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/authContext";
 import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
+import Dropdown from "../components/Dropdown";
 
 function CollectionEditor() {
     const { currentUser, userLogged } = useAuth();
@@ -10,6 +11,7 @@ function CollectionEditor() {
 
 
     const { id } = useParams();
+    const [name,setName] = useState("");
     const [creator,setCreator] = useState("");
     const [grade, setGrade] = useState("");
     const [subject, setSubject] = useState("");
@@ -43,6 +45,7 @@ function CollectionEditor() {
         const docRef = doc(db, "collections", id);
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
+            setName(docSnap.data().name);
             setCards(docSnap.data().cards);
             setGrade(docSnap.data().grade);
             setSubject(docSnap.data().subject);
@@ -72,7 +75,8 @@ function CollectionEditor() {
 
         try {
             const collectionData = {
-                creatorId: currentUser.uid,
+                user: currentUser,
+                name: name,
                 grade: parseInt(grade),
                 subject: subject,
                 difficulty: parseInt(difficulty),
@@ -106,6 +110,7 @@ function CollectionEditor() {
     };
 
     useEffect(() => {
+        console.log(currentUser)
         if (id!==undefined) {
             loadCollection(id);
         }
@@ -131,54 +136,21 @@ function CollectionEditor() {
             <h1>Create Collection</h1>
 
             <form onSubmit={handleSubmit}>
+                <div className="mb-2">
+                    <label className="form-label">Collection Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        disabled={creator!==currentUser.uid}
+                    />
+                </div>
                 <div className="row mb-3">
-                    <div className="col-md-4">
-                        <label className="form-label">Grade</label>
-                        <select
-                            className="form-select"
-                            value={grade}
-                            onChange={(e) => setGrade(e.target.value)}
-                            required
-                            disabled={creator!==currentUser.uid}
-                        >
-                            <option value="">Select grade...</option>
-                            {[6, 7, 8, 9].map(g => (
-                                <option key={g} value={g}>{g}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-md-4">
-                        <label className="form-label">Subject</label>
-                        <select
-                            className="form-select"
-                            value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
-                            required
-                            disabled={creator!==currentUser.uid}
-                        >
-                            <option value="">Select subject...</option>
-                            {subjects.map(s => (
-                                <option key={s} value={s}>{s}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-md-4">
-                        <label className="form-label">Difficulty</label>
-                        <select
-                            className="form-select"
-                            value={difficulty}
-                            onChange={(e) => setDifficulty(e.target.value)}
-                            required
-                            disabled={creator!==currentUser.uid}
-                        >
-                            <option value="">Select difficulty...</option>
-                            {[1, 2, 3].map(d => (
-                                <option key={d} value={d}>{d}</option>
-                            ))}
-                        </select>
-                    </div>
+                    <Dropdown items={[6,7,8,9]} name={"Grade"} set={setGrade} get={grade} disabled={creator!==currentUser.uid}></Dropdown>
+                    <Dropdown items={subjects} name={"Subjects"} set={setSubject} get={subject} disabled={creator!==currentUser.uid} ></Dropdown>
+                    <Dropdown items={[1, 2, 3]} name={"Difficulty"} set={setDifficulty} get={difficulty} disabled={creator!==currentUser.uid} ></Dropdown>
                 </div>
 
                 <h4 className="mt-4">Cards</h4>
