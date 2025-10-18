@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/authContext";
 import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDocs, setDoc} from "firebase/firestore";
+import Collection from "../components/Collection";
 
 function Collections() {
     const { currentUser, userLogged } = useAuth();
@@ -29,31 +30,29 @@ function Collections() {
 
 
     const loadCollections = async (id) => {
-        const querySnapshot  = await getDocs((collection(db,"collections")));
-        // if(docSnap.exists()) {
-        //     console.log(docSnap.data())
-            // setCards(docSnap.data().cards);
-            // setGrade(docSnap.data().grade);
-            // setSubject(docSnap.data().subject);
-            // setDifficulty(docSnap.data().difficulty);
-            // setCreator(docSnap.data().creatorId);
-        // }
-        // console.log(docSnap.data().creatorId);
-        // console.log(currentUser.uid)
-        // console.log(docSnap.data().creatorId===currentUser.uid);
+        try {
+            const querySnapshot = await getDocs((collection(db, "collections")));
+            const collections = [];
+
+            querySnapshot.forEach((doc) => {
+                collections.push({
+                     id: doc.id,
+                    ...doc.data()
+                });
+            });
+
+            console.log(collections);
+            setCollections(collections);
+        }catch (error) {
+        console.error("Error fetching users:", error);
+    }
     }
 
 
 
 
     useEffect(() => {
-
-        console.log(":3")
-        if (id!==undefined) {
-            loadCollections(id);
-        }
-        // else
-            // setCreator(currentUser.uid)
+        loadCollections();
     },[])
 
     if (!userLogged) {
@@ -70,8 +69,14 @@ function Collections() {
     }
 
     return (
-        <div>
-            this is a start :3
+        <div className="container my-4">
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+                    {collections.map((collection) => (
+                        <Collection key={collection.id} data={collection} />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
