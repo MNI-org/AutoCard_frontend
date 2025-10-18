@@ -28,7 +28,7 @@ function Login() {
             const user = userCredential.user;
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
-                // displayName: user.displayName
+                displayName: user.email,
                 level:1,
                 xp:0
             });
