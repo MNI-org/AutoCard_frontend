@@ -41,7 +41,7 @@ function Collections() {
                 });
             });
 
-            console.log(collections);
+            // console.log(collections);
             setCollections(collections);
         }catch (error) {
         console.error("Error fetching users:", error);

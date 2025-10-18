@@ -45,12 +45,16 @@ function CollectionEditor() {
         const docRef = doc(db, "collections", id);
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
-            setName(docSnap.data().name);
-            setCards(docSnap.data().cards);
-            setGrade(docSnap.data().grade);
-            setSubject(docSnap.data().subject);
-            setDifficulty(docSnap.data().difficulty);
-            setCreator(docSnap.data().creatorId);
+            const data=docSnap.data();
+            setName(data.name);
+            setCards(data.cards);
+            setGrade(data.grade);
+            setSubject(data.subject);
+            setDifficulty(data.difficulty);
+            setCreator(data.user.uid);
+            // console.log(docSnap.data());
+            // console.log(data.user.uid)
+            // console.log("..................")
         }
         // console.log(docSnap.data().creatorId);
         // console.log(currentUser.uid)
@@ -110,12 +114,14 @@ function CollectionEditor() {
     };
 
     useEffect(() => {
-        console.log(currentUser)
+
         if (id!==undefined) {
             loadCollection(id);
         }
         else
             setCreator(currentUser.uid)
+        // console.log(currentUser)
+        // console.log(creator)
     },[])
 
     if (!userLogged) {
