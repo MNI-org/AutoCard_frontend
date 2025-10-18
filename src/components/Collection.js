@@ -5,13 +5,16 @@ import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
 
 function Collection(props) {
-
+    const navigate = useNavigate();
     useEffect(() => {
         // console.log(props.data)
     },[])
 
     return (
-        <div className="card mb-3 shadow-sm">
+        <div className="card mb-3 shadow-sm hover-card"
+             onClick={() => navigate(`/learn/${props.data.id}`)}
+             style={{ cursor: 'pointer' }}
+        >
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-start mb-2">
                     <h5 className="card-title mb-0">{props.data.name}</h5>
