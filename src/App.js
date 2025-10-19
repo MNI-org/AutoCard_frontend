@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import CollectionEditor from "./pages/CollectionEditor";
 import Collections from "./pages/Collections";
 import CollectionMainPage from "./pages/CollectionMainPage";
+import GenerateCollection from "./pages/GenerateCollection";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/editor/:id" element={<CollectionEditor/>}/>
                     <Route path="/editor" element={<CollectionEditor/>}/>
+                    <Route path="/generate" element={<GenerateCollection/>}/>
                     <Route path="/collections/:id" element={<Collections/>}/>
                     <Route path="/collections" element={<Collections/>}/>
                     <Route path="/learn/:id" element={<CollectionMainPage/>}/>
