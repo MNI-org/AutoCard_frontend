@@ -5,6 +5,7 @@ import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignI
 import { db } from "../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
+import Logo from '../assets/AutoCard_logo.png';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -81,77 +82,101 @@ function Login() {
 
     return (
         <>
-        <Navbar curr={"login"}/>
-        <div className="container">
-            <div className="row justify-content-center mt-5">
-                <div className="col-md-6 col-lg-4">
-                    <div className="card shadow-sm">
-                        <div className="card-body">
-                            <h2 className="card-title text-center mb-4">
-                                {isSignUp ? "Sign Up" : "Login"}
-                            </h2>
+            <Navbar curr={"login"}/>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-5 d-flex flex-column align-items-center justify-content-center"
+                         style={{
+                             height: "100vh",
+                             background: "linear-gradient(90deg, #20c997, #ffffff)",
+                         }}>
+                        <img
+                            src={Logo}
+                            alt="AutoCard Logo"
+                            className="img-fluid mb-3"
+                            style={{width: "50vh"}}
+                        />
+                        <div className="card" style={{
+                            backgroundColor: "rgba(255, 255, 255, 0.25)",
+                            border: "none",
+                            backdropFilter: "blur(10px)"
+                        }}>
+                        </div>
+                    </div>
+                <div className="col-md-7 d-flex align-items-center justify-content-center">
+                    <div className="row justify-content-center w-100">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="card shadow-lg p-4 rounded-4">
+                                <div className="card-body">
+                                    <h2 className="card-title text-center mb-4">
+                                        {isSignUp ? "Sign Up" : "Login"}
+                                    </h2>
 
-                            <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
-                                <div className="mb-3">
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        placeholder="Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
+                                    <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
+                                        <div className="mb-3">
+                                            <input
+                                                type="email"
+                                                className="form-control"
+                                                placeholder="Email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-3">
+                                            <input
+                                                type="password"
+                                                className="form-control"
+                                                placeholder="Password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <button type="submit" className="btn btn-primary w-100 mb-2">
+                                            {isSignUp ? "Sign Up" : "Login"}
+                                        </button>
+                                    </form>
+
+                                    <div className="text-center my-2">
+                                        <span className="text-muted">or</span>
+                                    </div>
+
+                                    <button
+                                        onClick={handleGoogleSignIn}
+                                        className="btn btn-outline-danger w-100 mb-2"
+                                    >
+                                        <i className="bi bi-google me-2"></i>
+                                        Continue with Google
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            setIsSignUp(!isSignUp);
+                                            setStatus("");
+                                        }}
+                                        className="btn btn-link w-100"
+                                    >
+                                        {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+                                    </button>
+
+                                    {status && (
+                                        <div
+                                            className={`alert ${status.includes("Error") ? "alert-danger" : "alert-success"} mt-3`}
+                                            role="alert">
+                                            {status}
+                                        </div>
+                                    )}
                                 </div>
-
-                                <div className="mb-3">
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        placeholder="Password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <button type="submit" className="btn btn-primary w-100 mb-2">
-                                    {isSignUp ? "Sign Up" : "Login"}
-                                </button>
-                            </form>
-
-                            <div className="text-center my-2">
-                                <span className="text-muted">or</span>
                             </div>
-
-                            <button
-                                onClick={handleGoogleSignIn}
-                                className="btn btn-outline-danger w-100 mb-2"
-                            >
-                                <i className="bi bi-google me-2"></i>
-                                Continue with Google
-                            </button>
-
-                            <button
-                                onClick={() => {
-                                    setIsSignUp(!isSignUp);
-                                    setStatus("");
-                                }}
-                                className="btn btn-link w-100"
-                            >
-                                {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
-                            </button>
-
-                            {status && (
-                                <div className={`alert ${status.includes("Error") ? "alert-danger" : "alert-success"} mt-3`} role="alert">
-                                    {status}
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </>
+    </>
     );
 }
 
