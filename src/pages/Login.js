@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/authContext";
 import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignInWithGoogle } from "../firebase/auth";
 import { db } from "../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import Navbar from "../components/Navbar";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -79,6 +80,8 @@ function Login() {
     };
 
     return (
+        <>
+        <Navbar curr={"login"}/>
         <div className="container">
             <div className="row justify-content-center mt-5">
                 <div className="col-md-6 col-lg-4">
@@ -148,6 +151,7 @@ function Login() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

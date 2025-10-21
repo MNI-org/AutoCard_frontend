@@ -4,6 +4,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
 import Dropdown from "../components/Dropdown";
+import Navbar from "../components/Navbar";
 
 function CollectionEditor() {
     const { currentUser, userLogged } = useAuth();
@@ -138,7 +139,10 @@ function CollectionEditor() {
     }
 
     return (
-        <div className="container mt-4">
+        <><Navbar curr={"editor"}/>
+        <div className="container col-lg-8 mt-4">
+
+
             <h1>Create Collection</h1>
 
             <form onSubmit={handleSubmit}>
@@ -233,6 +237,7 @@ function CollectionEditor() {
                 )}
             </form>
         </div>
+        </>
     );
 }
 

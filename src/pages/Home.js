@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import { doSignOut } from "../firebase/auth";
+import Navbar from "../components/Navbar";
 
 function Home() {
     const { currentUser, userLogged } = useAuth();
@@ -18,6 +19,7 @@ function Home() {
 
     return (
         <div>
+            <Navbar curr={"home"}/>
             <h1>Home Page</h1>
 
             {userLogged ? (
