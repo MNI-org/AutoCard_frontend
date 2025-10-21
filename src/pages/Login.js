@@ -15,7 +15,6 @@ function Login() {
     const navigate = useNavigate();
     const { userLogged } = useAuth();
 
-    // Redirect if already logged in
     React.useEffect(() => {
         if (userLogged) {
             navigate("/");
@@ -24,159 +23,148 @@ function Login() {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        setStatus("Processing...");
+        setStatus("Obdelujem...");
         try {
             const userCredential = await doCreateUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 displayName: user.email,
-                level:1,
-                xp:0
+                level: 1,
+                xp: 0
             });
-            setStatus("Account created successfully!");
+            setStatus("Račun uspešno ustvarjen!");
             navigate("/");
         } catch (error) {
             if (error.code === "auth/email-already-in-use") {
-                setStatus("Error: Email already in use.");
+                setStatus("Napaka: Email je že v uporabi.");
             } else {
-                setStatus("Error: " + error.message);
+                setStatus("Napaka: " + error.message);
             }
         }
     };
 
     const handleSignIn = async (e) => {
         e.preventDefault();
-        setStatus("Processing...");
+        setStatus("Obdelujem...");
         try {
             await doSignInWithEmailAndPassword(email, password);
-            setStatus("Logged in successfully!");
+            setStatus("Prijava uspešna!");
             navigate("/");
         } catch (error) {
             if (error.code === "auth/invalid-credential") {
-                setStatus("Error: Invalid email or password.");
+                setStatus("Napaka: Napačen email ali geslo.");
             } else {
-                setStatus("Error: " + error.message);
+                setStatus("Napaka: " + error.message);
             }
         }
     };
 
     const handleGoogleSignIn = async () => {
-        setStatus("Processing...");
+        setStatus("Obdelujem...");
         try {
             const result = await doSignInWithGoogle();
             const user = result.user;
-            // Store user in Firestore (merge: true handles both new and existing users)
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 displayName: user.displayName,
-                level: user.level?? 1,
+                level: user.level ?? 1,
                 xp: user.xp ?? 0
             }, { merge: true });
-            setStatus("Logged in with Google successfully!");
+            setStatus("Prijava z Googlom uspešna!");
             navigate("/");
         } catch (error) {
-            setStatus("Error: " + error.message);
+            setStatus("Napaka: " + error.message);
         }
     };
 
     return (
         <>
-            <Navbar curr={"login"}/>
+            <Navbar curr={"login"} />
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-5 d-flex flex-column align-items-center justify-content-center"
-                         style={{
-                             height: "100vh",
-                             background: "linear-gradient(90deg, #20c997, #ffffff)",
-                         }}>
+                        style={{
+                            height: "calc(100vh - 72.67px)",
+                            background: "linear-gradient(90deg, #20c997, #ffffff)",
+                        }}>
                         <img
                             src={Logo}
                             alt="AutoCard Logo"
                             className="img-fluid mb-3"
-                            style={{width: "50vh"}}
+                            style={{ width: "50vh" }}
                         />
-                        <div className="card" style={{
-                            backgroundColor: "rgba(255, 255, 255, 0.25)",
-                            border: "none",
-                            backdropFilter: "blur(10px)"
-                        }}>
-                        </div>
+                        <h2 className="mb-3 text-center text-secondary" style={{ fontWeight: 400 }}>
+                            Tvoje datoteke, tvoje kartice, tvoje znanje.
+                        </h2>
                     </div>
-                <div className="col-md-7 d-flex align-items-center justify-content-center">
-                    <div className="row justify-content-center w-100">
-                        <div className="col-md-8 col-lg-6">
-                            <div className="card shadow-lg p-4 rounded-4">
-                                <div className="card-body">
-                                    <h2 className="card-title text-center mb-4">
-                                        {isSignUp ? "Sign Up" : "Login"}
-                                    </h2>
-
-                                    <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
-                                        <div className="mb-3">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                placeholder="Email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                required
-                                            />
+                    <div className="col-md-7 d-flex align-items-center justify-content-center">
+                        <div className="row justify-content-center w-100">
+                            <div className="col-md-8 col-lg-6">
+                                <div className="card shadow-lg p-4 rounded-4">
+                                    <div className="card-body">
+                                        <h2 className="card-title text-center mb-4">
+                                            {isSignUp ? "Registracija" : "Prijava"}
+                                        </h2>
+                                        <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
+                                            <div className="mb-3">
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    placeholder="E-pošta"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <input
+                                                    type="password"
+                                                    className="form-control"
+                                                    placeholder="Geslo"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    required
+                                                />
+                                            </div>
+                                            <button type="submit" className="btn btn-primary w-100 mb-2">
+                                                {isSignUp ? "Ustvari račun" : "Prijava"}
+                                            </button>
+                                        </form>
+                                        <div className="text-center my-2">
+                                            <span className="text-muted">ali</span>
                                         </div>
-
-                                        <div className="mb-3">
-                                            <input
-                                                type="password"
-                                                className="form-control"
-                                                placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-
-                                        <button type="submit" className="btn btn-primary w-100 mb-2">
-                                            {isSignUp ? "Sign Up" : "Login"}
+                                        <button
+                                            onClick={handleGoogleSignIn}
+                                            className="btn btn-outline-danger w-100 mb-2"
+                                        >
+                                            <i className="bi bi-google me-2"></i>
+                                            Nadaljuj z Google
                                         </button>
-                                    </form>
-
-                                    <div className="text-center my-2">
-                                        <span className="text-muted">or</span>
+                                        <button
+                                            onClick={() => {
+                                                setIsSignUp(!isSignUp);
+                                                setStatus("");
+                                            }}
+                                            className="btn btn-link w-100"
+                                        >
+                                            {isSignUp ? "Že imate račun? Prijava" : "Nimate računa? Registracija"}
+                                        </button>
+                                        {status && (
+                                            <div
+                                                className={`alert ${status.includes("Napaka") ? "alert-danger" : "alert-success"} mt-3`}
+                                                role="alert">
+                                                {status}
+                                            </div>
+                                        )}
                                     </div>
-
-                                    <button
-                                        onClick={handleGoogleSignIn}
-                                        className="btn btn-outline-danger w-100 mb-2"
-                                    >
-                                        <i className="bi bi-google me-2"></i>
-                                        Continue with Google
-                                    </button>
-
-                                    <button
-                                        onClick={() => {
-                                            setIsSignUp(!isSignUp);
-                                            setStatus("");
-                                        }}
-                                        className="btn btn-link w-100"
-                                    >
-                                        {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
-                                    </button>
-
-                                    {status && (
-                                        <div
-                                            className={`alert ${status.includes("Error") ? "alert-danger" : "alert-success"} mt-3`}
-                                            role="alert">
-                                            {status}
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </>
+        </>
     );
 }
 
