@@ -4,6 +4,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDocs, setDoc} from "firebase/firestore";
 import Collection from "../components/Collection";
+import Search from "../components/Search";
 
 function Collections() {
     const { currentUser, userLogged } = useAuth();
@@ -18,6 +19,10 @@ function Collections() {
     // const [cards, setCards] = useState([{ q: "", a: "", order: 1 }]);
     // const [status, setStatus] = useState("");
     const [collections, setCollections] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [grade, setGrade] = useState("");
+    const [subject, setSubject] = useState("");
+    const [difficulty, setDifficulty] = useState("");
     const subjects = [
         "SLO", "MAT", "ANG", "LUM", "GUM",
         "GEO", "ZGO", "ETK", "FIZ", "KEM",
@@ -72,8 +77,17 @@ function Collections() {
         <div className="container my-4">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
+
+                    <Search keyword={[keyword,setKeyword]} grade={[grade,setGrade]} subject={[subject,setSubject]} difficulty={[difficulty,setDifficulty]} />
+
                     {collections.map((collection) => (
-                        <Collection key={collection.id} data={collection} />
+                        //checka ce je keyword anywhere in collection
+                        JSON.stringify(collection).toLowerCase().includes(keyword.toLowerCase()) &&
+                            //check za grade
+                        (grade === "" || collection.grade.toString() === grade) &&
+                        (subject === "" || collection.subject === subject) &&
+                        (difficulty === "" || collection.difficulty.toString() === difficulty) &&
+                        <Collection key={collection.id} data={collection}/>
                     ))}
                 </div>
             </div>
