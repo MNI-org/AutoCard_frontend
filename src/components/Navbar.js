@@ -1,0 +1,94 @@
+import React, {useEffect, useState} from "react";
+import { useAuth } from "../contexts/authContext";
+import { useNavigate,useParams } from "react-router-dom";
+import { db } from "../firebase/firebase";
+import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
+import {doSignOut} from "../firebase/auth";
+
+
+
+
+function Navbar(props) {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    const navigate = useNavigate();
+    const { currentUser, userLogged } = useAuth();
+
+    const handleLogout = async () => {
+        try {
+            await doSignOut();
+            navigate("/");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    };
+
+
+    return (
+        <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm py-3">
+            <div className="container-fluid px-4"> {/* 👈 fluid container = edge-to-edge */}
+                <a className="navbar-brand fw-bold">
+                    <button className="nav-link active"
+                            onClick={() => navigate("/")}>
+                        AutoCard
+                    </button>
+                </a>
+
+
+
+                {/*Mobile view*/}
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                <div className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}>
+                    <ul className="navbar-nav ms-auto"> {/* 👈 ms-auto = push items to right edge */}
+
+                        { userLogged ?
+                            <>
+                        <li className="nav-item">
+                            <button className={`nav-link ${props.curr==="home" ? "active" :""}`}
+                                    onClick={() => navigate("/")}>
+                                Domov
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className={`nav-link ${props.curr==="collections" ? "active" :""}`}
+                                    onClick={() => navigate("/collections")}>
+                                Zbirke
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className={`nav-link ${props.curr==="editor" ? "active" :""}`}
+                                    onClick={() => navigate("/editor")}>
+                                Ustvari
+                            </button>
+                        </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link`}
+                                            onClick={() => handleLogout()}>
+                                        Odjava
+                                    </button>
+                                </li>
+
+                            </>
+                        :
+                            <li className="nav-item">
+                                <button className={`nav-link ${props.curr==="login" ? "active" :""}`}
+                                        onClick={() => navigate("/login")}>
+                                    Prijava
+                                </button>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    );
+}
+
+export default Navbar;

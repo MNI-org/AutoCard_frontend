@@ -5,6 +5,7 @@ import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDocs, setDoc} from "firebase/firestore";
 import Collection from "../components/Collection";
 import Search from "../components/Search";
+import Navbar from "../components/Navbar";
 
 function Collections() {
     const { currentUser, userLogged } = useAuth();
@@ -74,6 +75,9 @@ function Collections() {
     }
 
     return (
+        <>
+            <Navbar curr={"collections"}/>
+
         <div className="container my-4">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
@@ -92,6 +96,7 @@ function Collections() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
