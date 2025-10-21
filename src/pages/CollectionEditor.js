@@ -10,7 +10,6 @@ function CollectionEditor() {
     const { currentUser, userLogged } = useAuth();
     const navigate = useNavigate();
 
-
     const { id } = useParams();
     const [name,setName] = useState("");
     const [creator,setCreator] = useState("");
