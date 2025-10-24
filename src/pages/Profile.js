@@ -4,11 +4,18 @@ import Navbar from '../components/Navbar'
 import Collection from '../components/Collection';
 import { db } from "../firebase/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { doPasswordReset} from "../firebase/auth";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Profile() {
     const { currentUser, loading } = useAuth();
     const [userCollections, setUserCollections] = useState([]);
     const [loadingCollections, setLoadingCollections] = useState(false);
+    const [resetEmailSent, setResetEmailSent] = useState(false);
+    const [resetError, setResetError] = useState(null);
+    const [resettingPassword, setResettingPassword] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (currentUser) {
@@ -35,12 +42,30 @@ export default function Profile() {
         setLoadingCollections(false);
     };
 
+    const handlePasswordReset = async () => {
+        setResettingPassword(true);
+        setResetError(null);
+        try {
+            await doPasswordReset(currentUser.email);
+            setResetEmailSent(true);
+            setTimeout(() => setResetEmailSent(false), 5000);
+        } catch (e) {
+            setResetError(e.message)
+        }
+        setResettingPassword(false);
+    };
+
     if (loading) {
         return <div className="container mt-5"><p>Loading...</p></div>;
     }
 
     if (!currentUser) {
-        return <div className="container mt-5"><p>Please log in to view your profile.</p></div>;
+        return <div className="container mt-5">
+            <p>Please log in to view your profile.</p>
+            <button className="btn btn-primary" onClick={() => navigate('/login')}>
+                Login Here
+            </button>
+        </div>;
     }
 
     return (
@@ -82,9 +107,31 @@ export default function Profile() {
                                 {currentUser.xp || 'Not set'}
                             </div>
                         </div>
+
+                        <div className="row mt-4">
+                            <div className="col-12">
+                                { resetEmailSent && (
+                                    <div className="alert alert-success">
+                                        Password reset email sent ! Check email address
+                                    </div>
+                                )}
+                                {resetError && (
+                                    <div className="alert alert-danger" role="alert">
+                                        {resetError}
+                                    </div>
+                                )}
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={handlePasswordReset}
+                                    disabled={resettingPassword}>
+
+                                    {resettingPassword ? 'Sending...' : 'Reset password'}
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
                 <h2 className="mb-3">Your Collections</h2>
                 {loadingCollections ? (
                     <p>Loading collections...</p>
