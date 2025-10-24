@@ -24,7 +24,9 @@ function Home() {
 
             {userLogged ? (
                 <div>
-                    <p>Welcome, {currentUser?.displayName}!</p>
+                    <p onClick={() => navigate("/profile")} style={{ cursor: 'pointer' }}>
+                        Welcome, {currentUser?.displayName}!
+                    </p>
                     <button onClick={handleLogout}>Logout</button>
                     <button onClick={() => navigate("/editor")}>Collection Creation</button>
 
