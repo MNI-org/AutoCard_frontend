@@ -53,10 +53,17 @@ export function AuthProvider({ children }) {
         setLoading(false);
     }
 
+    const refreshUser = async () => {
+        if (auth.currentUser) {
+            await initializeUser(auth.currentUser);
+        }
+    };
+
     const value = {
         currentUser,
         userLogged,
-        loading
+        loading,
+        refreshUser
     }
 
     return (
