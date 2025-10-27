@@ -5,11 +5,11 @@ import { db } from "../firebase/firebase";
 import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
 import Dropdown from "../components/Dropdown";
 import Navbar from "../components/Navbar";
+import {generate} from "../generator/generator";
 
 function CollectionEditor() {
     const { currentUser, userLogged } = useAuth();
     const navigate = useNavigate();
-
 
     const { id } = useParams();
     const [name,setName] = useState("");
@@ -19,11 +19,39 @@ function CollectionEditor() {
     const [difficulty, setDifficulty] = useState("");
     const [cards, setCards] = useState([{ q: "", a: "", order: 1 }]);
     const [status, setStatus] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const subjects = [
         "SLO", "MAT", "ANG", "LUM", "GUM",
         "GEO", "ZGO", "ETK", "FIZ", "KEM",
         "BIO", "NAR", "TEH", "GOS", "SPO"
     ];
+
+    const onFileChange = (event) => {
+        setSelectedFile(event.target.files?.[0] ?? null);
+    };
+
+    const handleGeneration = async () => {
+        setStatus("Generiram zbirko...");
+        const json = await generate(selectedFile);
+        if (json != null) {
+            setSubject(json.subject);
+            initializeCards(json);
+            setStatus("Generiranje zaključeno.");
+        }
+        else {
+            setStatus("Napaka med generiranjem.")
+        }
+    };
+
+    const initializeCards = (json) => {
+        if (!json || !Array.isArray(json.cards)) return;
+        setCards(json.cards.map((card, i) => ({
+            q: card.q || "",
+            a: card.a || "",
+            order: i
+        })));
+    };
 
     const addCard = () => {
         setCards([...cards, { q: "", a: "", order: cards.length + 1 }]);
@@ -129,9 +157,9 @@ function CollectionEditor() {
         return (
             <div className="container mt-5">
                 <div className="alert alert-warning">
-                    <p>You need to be logged in to access this!</p>
+                    <p>Za dostop do te strani se morate prijaviti!</p>
                     <button className="btn btn-primary" onClick={() => navigate("/login")}>
-                        Go to Login
+                        Pojdi na prijavo
                     </button>
                 </div>
             </div>
@@ -139,102 +167,115 @@ function CollectionEditor() {
     }
 
     return (
-        <><Navbar curr={"editor"}/>
+        <>
+        <Navbar curr={"editor"}/>
         <div className="container col-lg-8 mt-4">
-
-
-            <h1>Create Collection</h1>
-
+            <h1>Ustvari zbirko</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-2">
-                    <label className="form-label">Collection Name</label>
+                    <label className="form-label">Ime zbirke</label>
                     <input
                         type="text"
                         className="form-control"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        disabled={creator!==currentUser.uid}
+                        disabled={creator !== currentUser.uid}
                     />
                 </div>
                 <div className="row mb-3">
-                    <Dropdown items={[6,7,8,9]} name={"Grade"} set={setGrade} get={grade} disabled={creator!==currentUser.uid}></Dropdown>
-                    <Dropdown items={subjects} name={"Subjects"} set={setSubject} get={subject} disabled={creator!==currentUser.uid} ></Dropdown>
-                    <Dropdown items={[1, 2, 3]} name={"Difficulty"} set={setDifficulty} get={difficulty} disabled={creator!==currentUser.uid} ></Dropdown>
-                </div>
-
-                <h4 className="mt-4">Cards</h4>
-                {cards.map((card, index) => (
-                    <div key={index} className="card mb-3">
-                        <div className="card-body">
-                            <div className="d-flex justify-content-between align-items-center mb-2">
-                                <h5 className="card-title mb-0">Card {card.order}</h5>
-                                {cards.length > 1 && creator===currentUser.uid && (
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm btn-danger"
-                                        onClick={() => removeCard(index)}
-                                    >
-                                        Remove
-                                    </button>
-                                )}
-                            </div>
-                            <div className="mb-2">
-                                <label className="form-label">Question</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={card.q}
-                                    onChange={(e) => updateCard(index, "q", e.target.value)}
-                                    required
-                                    disabled={creator!==currentUser.uid}
-                                />
-                            </div>
-                            <div>
-                                <label className="form-label">Answer</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={card.a}
-                                    onChange={(e) => updateCard(index, "a", e.target.value)}
-                                    required
-                                    disabled={creator!==currentUser.uid}
-                                />
-                            </div>
-                        </div>
+                    <div className="col-md-4">
+                        <label className="form-label">Naloži PDF</label>
+                        <input type="file" className="form-control" onChange={onFileChange} accept="application/pdf"/>
                     </div>
-                ))}
-
-                {creator===currentUser.uid &&(<button
-                    type="button"
-                    className="btn btn-secondary mb-3"
-                    onClick={addCard}
-                >
-                    + Add Card
-                </button>)}
-
-
-
-                <div className="d-grid gap-2">
-                    {!id ?
-                        <button type="submit" className="btn btn-primary btn-lg">
-                            Create Collection
+                    <div className="col-md-4 d-flex flex-column">
+                        <button
+                            type="button"
+                            className="btn btn-secondary mt-auto"
+                            onClick={handleGeneration}
+                            disabled={!selectedFile}
+                        >
+                            Generiraj zbirko
                         </button>
-                        :
-                        creator===currentUser.uid &&
-                        <button type="submit" className="btn btn-primary btn-lg">
-                            Update Collection
-                        </button>
-                    }
+                    </div>
                 </div>
-
-
+                <div className="row mb-3">
+                    <Dropdown items={[6, 7, 8, 9]} name={"Razred"} set={setGrade} get={grade}
+                              disabled={creator !== currentUser.uid}></Dropdown>
+                    <Dropdown items={subjects} name={"Predmet"} set={setSubject} get={subject}
+                              disabled={creator !== currentUser.uid}></Dropdown>
+                    <Dropdown items={[1, 2, 3]} name={"Težavnost"} set={setDifficulty} get={difficulty}
+                              disabled={creator !== currentUser.uid}></Dropdown>
+                </div>
 
                 {status && (
                     <div className={`alert mt-3 ${status.includes("Error") ? "alert-danger" : "alert-success"}`}>
                         {status}
                     </div>
                 )}
+
+                <h4 className="mt-4">Kartice</h4>
+                {cards.map((card, index) => (
+                    <div key={index} className="card mb-3">
+                        <div className="card-body">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h5 className="card-title mb-0">Kartica {card.order}</h5>
+                                {cards.length > 1 && creator === currentUser.uid && (
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => removeCard(index)}
+                                    >
+                                        Odstrani
+                                    </button>
+                                )}
+                            </div>
+                            <div className="mb-2">
+                                <label className="form-label">Vprašanje</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={card.q}
+                                    onChange={(e) => updateCard(index, "q", e.target.value)}
+                                    required
+                                    disabled={creator !== currentUser.uid}
+                                />
+                            </div>
+                            <div>
+                                <label className="form-label">Odgovor</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={card.a}
+                                    onChange={(e) => updateCard(index, "a", e.target.value)}
+                                    required
+                                    disabled={creator !== currentUser.uid}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+
+                {creator === currentUser.uid && (<button
+                    type="button"
+                    className="btn btn-secondary mb-3"
+                    onClick={addCard}
+                >
+                    + Dodaj kartico
+                </button>)}
+
+                <div className="d-grid gap-2">
+                    {!id ?
+                        <button type="submit" className="btn btn-primary btn-lg">
+                            Ustvari zbirko
+                        </button>
+                        :
+                        creator === currentUser.uid &&
+                        <button type="submit" className="btn btn-primary btn-lg">
+                            Posodobi zbirko
+                        </button>
+                    }
+                </div>
             </form>
         </div>
         </>
