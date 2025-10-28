@@ -2,8 +2,10 @@ import React, {useEffect, useState} from "react";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate,useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import {doc, collection, addDoc, getDocs, setDoc} from "firebase/firestore";
+import {doc, collection, addDoc, getDocs, setDoc, getDoc} from "firebase/firestore";
 import Collection from "../components/Collection";
+import Flashcard from "../components/Flashcard";
+import Navbar from "../components/Navbar";
 
 function CollectionMainPage() {
     const { currentUser, userLogged } = useAuth();
@@ -11,38 +13,16 @@ function CollectionMainPage() {
 
 
     const { id } = useParams();
-    // const [creator,setCreator] = useState("");
-    // const [grade, setGrade] = useState("");
-    // const [subject, setSubject] = useState("");
-    // const [difficulty, setDifficulty] = useState("");
-    // const [cards, setCards] = useState([{ q: "", a: "", order: 1 }]);
-    // const [status, setStatus] = useState("");
-    const [collections, setCollections] = useState([]);
-    const subjects = [
-        "SLO", "MAT", "ANG", "LUM", "GUM",
-        "GEO", "ZGO", "ETK", "FIZ", "KEM",
-        "BIO", "NAR", "TEH", "GOS", "SPO"
-    ];
+    const [collection, setCollection] = useState(null);
+    const [index, setIndex] = useState(0);
+    const [max, setMax] = useState(0);
 
-
-
-
-
-
-    const loadCollections = async (id) => {
+    async function loadCollections () {
         try {
-            const querySnapshot = await getDocs((collection(db, "collections")));
-            const collections = [];
-
-            querySnapshot.forEach((doc) => {
-                collections.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-            });
-
-            console.log(collections);
-            setCollections(collections);
+            const docSnap = await getDoc((doc(db, "collections",id)));
+            // console.log(docSnap);
+            setCollection(docSnap.data());
+            setMax(docSnap.data().cards.length);
         }catch (error) {
             console.error("Error fetching users:", error);
         }
@@ -51,8 +31,21 @@ function CollectionMainPage() {
 
 
 
+
+
+    useEffect(() => {
+        const handleKeyPress = (e) => {
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+        };
+
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [index, collection]);
+
     useEffect(() => {
         loadCollections();
+
     },[])
 
     if (!userLogged) {
@@ -68,11 +61,94 @@ function CollectionMainPage() {
         );
     }
 
+    function next(){
+        setIndex((index+1) % max);
+    }
+    function prev(){
+        setIndex((index-1)<0?max-1:(index-1));
+    }
+
     return (
+        <>
+            <Navbar/>
         <div className="container my-4">
-            col main page<br/>
-            index: {id}
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+
+
+
+                    {collection && (
+                        <div className="mb-3">
+                            <div className="d-flex justify-content-between mb-2">
+                                <small className="text-muted">
+                                    Karta {index + 1} od {collection.cards?.length || 0}
+                                </small>
+                                <small className="text-muted">
+                                    {Math.round(((index + 1) / (collection.cards?.length || 1)) * 100)}% končano
+                                </small>
+                            </div>
+                            <div className="progress" style={{ height: '8px' }}>
+                                <div
+                                    className="progress-bar"
+                                    role="progressbar"
+                                    style={{ width: `${((index + 1) / (collection.cards?.length || 1)) * 100}%` }}
+                                    aria-valuenow={index + 1}
+                                    aria-valuemin="0"
+                                    aria-valuemax={collection.cards?.length || 0}
+                                ></div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="mb-3">
+                        <select
+                            className="form-select"
+                            value={index}
+                            onChange={(e) => setIndex(parseInt(e.target.value))}
+                        >
+                            {collection?.cards.map((card, i) => (
+                                <option key={i} value={i}>
+                                    Question {i + 1}: {card.q.substring(0, 50)}{card.q.length > 50 ? '...' : ''}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {collection ? (
+                        <Flashcard card={collection.cards[index]} />
+                    ) : (
+                        <div className="text-center my-5">
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="d-flex justify-content-between align-items-center mt-4">
+                        <button
+                            className="btn btn-outline-primary"
+                            onClick={prev}
+                            disabled={index === 0}
+                        >
+                            <i className="bi bi-arrow-left me-2"></i>
+                            Nazaj
+                        </button>
+
+
+
+                        <button
+                            className="btn btn-outline-primary"
+                            onClick={next}
+                            disabled={!collection || index === (collection.cards?.length - 1)}
+                        >
+                            Naprej
+                            <i className="bi bi-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+        </>
     );
 }
 

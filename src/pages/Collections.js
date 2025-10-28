@@ -12,7 +12,6 @@ function Collections() {
     const navigate = useNavigate();
 
 
-    const { id } = useParams();
     // const [creator,setCreator] = useState("");
     // const [grade, setGrade] = useState("");
     // const [subject, setSubject] = useState("");
@@ -35,7 +34,7 @@ function Collections() {
 
 
 
-    const loadCollections = async (id) => {
+    const loadCollections = async () => {
         try {
             const querySnapshot = await getDocs((collection(db, "collections")));
             const collections = [];

@@ -25,7 +25,7 @@ function Navbar(props) {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm py-3">
-            <div className="container-fluid px-4"> {/* 👈 fluid container = edge-to-edge */}
+            <div className="container-fluid px-4">
                 <a className="navbar-brand fw-bold">
                     <button className="nav-link active"
                             onClick={() => navigate("/")}>
@@ -35,7 +35,7 @@ function Navbar(props) {
 
 
 
-                {/*Mobile view*/}
+
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -45,7 +45,7 @@ function Navbar(props) {
                 </button>
 
                 <div className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}>
-                    <ul className="navbar-nav ms-auto"> {/* 👈 ms-auto = push items to right edge */}
+                    <ul className="navbar-nav ms-auto">
 
                         { userLogged ?
                             <>
