@@ -49,7 +49,7 @@ function Collections() {
             // console.log(collections);
             setCollections(collections);
         }catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Napaka pri pridobivanju uporabnikov", error);
     }
     }
 
@@ -64,9 +64,9 @@ function Collections() {
         return (
             <div className="container mt-5">
                 <div className="alert alert-warning">
-                    <p>You need to be logged in to access this!</p>
+                    <p>Za dostop se morate prijaviti.</p>
                     <button className="btn btn-primary" onClick={() => navigate("/login")}>
-                        Go to Login
+                        Prijava
                     </button>
                 </div>
             </div>

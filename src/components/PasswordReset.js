@@ -20,22 +20,22 @@ export default function PasswordReset({ email }) {
     };
 
     return (
-        <div className="row mt-4">
+        <div className="row">
             <div className="col-12">
                 {resetEmailSent && (
                     <div className="alert alert-success">
-                        Password reset email sent! Check email address
+                        Epošta za ponastavitev gesla je bila poslana.
                     </div>
                 )}
                 {resetError && (
                     <div className="alert alert-danger">{resetError}</div>
                 )}
                 <button
-                    className="btn btn-warning"
+                    className="btn btn-warning m-0"
                     onClick={handlePasswordReset}
                     disabled={resettingPassword}
                 >
-                    {resettingPassword ? 'Sending...' : 'Reset password'}
+                    {resettingPassword ? 'Pošiljanje' : 'Ponastavi geslo'}
                 </button>
             </div>
         </div>

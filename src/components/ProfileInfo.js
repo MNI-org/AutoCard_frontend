@@ -36,13 +36,13 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
     return (
         <div className="card mb-4">
             <div className="card-body">
-                <h1 className="card-title mb-4">Profile</h1>
+                <h1 className="card-title mb-4">Profil</h1>
                 <div className="row mb-3">
-                    <div className="col-sm-4"><strong>Email:</strong></div>
+                    <div className="col-sm-4"><strong>Epošta:</strong></div>
                     <div className="col-sm-8">{currentUser.email}</div>
                 </div>
                 <div className="row mb-3">
-                    <div className="col-sm-4"><strong>Display Name:</strong></div>
+                    <div className="col-sm-4"><strong>Uporabniško ime:</strong></div>
                     <div className="col-sm-8">
                         {isEditing ? (
                             <input
@@ -52,7 +52,7 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                                 onChange={(e) => setDisplayName(e.target.value)}
                             />
                         ) : (
-                            displayName || 'Not set'
+                            displayName || '0'
                         )}
                     </div>
                 </div>
@@ -66,7 +66,7 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                 </div>
 
                 {updateSuccess && (
-                    <div className="alert alert-success">Profile updated successfully!</div>
+                    <div className="alert alert-success">Uspešno ste posodobili profil!</div>
                 )}
                 {updateError && (
                     <div className="alert alert-danger">{updateError}</div>
@@ -88,7 +88,7 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                                                 Saving...
                                             </>
                                         ) : (
-                                            'Save Changes'
+                                            'Shrani spremembe'
                                         )}
                                     </button>
                                     <button
@@ -98,7 +98,7 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                                             setDisplayName(currentUser.displayName || '');
                                         }}
                                     >
-                                        Cancel
+                                        Prekliči
                                     </button>
                                 </div>
                             ) : (
@@ -106,7 +106,7 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                                     className="btn btn-primary"
                                     onClick={() => setIsEditing(true)}
                                 >
-                                    Edit Profile
+                                    Uredi Profil
                                 </button>
                             )}
                             <PasswordReset email={currentUser.email} />

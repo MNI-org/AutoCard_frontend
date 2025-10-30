@@ -16,7 +16,7 @@ function Dropdown(props) {
                 required
                 disabled={props.disabled}
             >
-                <option value="">Select {props.name}...</option>
+                <option value="">Izberi {props.name}...</option>
                 {props.items.map(g => (
                     <option key={g} value={g}>{g}</option>
                 ))}

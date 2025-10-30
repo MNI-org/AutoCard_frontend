@@ -34,7 +34,7 @@ export default function Profile() {
             });
             setUserCollections(collections);
         } catch (error) {
-            console.error("Error loading collections:", error);
+            console.error("Napaka pri pridobivanju zbirk", error);
         }
         setLoadingCollections(false);
     };
@@ -53,9 +53,9 @@ export default function Profile() {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
                 <div className="text-center">
-                    <h4 className="mb-4">Please log in to view your profile</h4>
+                    <h4 className="mb-4">Prijavite se za ogled profila.</h4>
                     <button className="btn btn-primary btn-lg" onClick={() => navigate('/login')}>
-                        Login Here
+                        Prijava
                     </button>
                 </div>
             </div>
@@ -76,7 +76,7 @@ export default function Profile() {
                                     <div className="spinner-border text-primary" role="status">
                                         <span className="visually-hidden">Loading...</span>
                                     </div>
-                                    <p className="text-muted mt-2">Loading collections...</p>
+                                    <p className="text-muted mt-2">Nalaganje zbirk</p>
                                 </div>
                             ) : userCollections.length > 0 ? (
                                 <div className="row g-3">
@@ -89,7 +89,7 @@ export default function Profile() {
                             ) : (
                                 <div className="alert alert-info text-center py-5">
                                     <h5>No collections yet</h5>
-                                    <p className="mb-0">You haven't created any collections yet.</p>
+                                    <p className="mb-0">Nimate ustvarjenih zbirk</p>
                                 </div>
                             )}
                         </div>

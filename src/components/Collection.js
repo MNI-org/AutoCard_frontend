@@ -41,7 +41,7 @@ function Collection(props) {
                                 navigate(`/editor/${props.data.id}`)
                             }}
                         >
-                            Change
+                            Uredi
                         </button>
                     )}
 
