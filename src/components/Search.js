@@ -14,7 +14,7 @@ function Search(props) {
 
     return (
         <div className="mb-2">
-            <label className="form-label">Search</label>
+            <label className="form-label">Išči</label>
             <input
                 type="text"
                 className="form-control"
@@ -23,9 +23,9 @@ function Search(props) {
                 required
             />
                 <div className="d-flex">
-                <Dropdown items={[6,7,8,9]} name={"Grade"} set={props.grade[1]} get={props.grade[0]} ></Dropdown>
-                <Dropdown items={subjects} name={"Subjects"} set={props.subject[1]} get={props.subject[0]}  ></Dropdown>
-                <Dropdown items={[1, 2, 3]} name={"Difficulty"} set={props.difficulty[1]} get={props.difficulty[0]}  ></Dropdown>
+                <Dropdown items={[6,7,8,9]} name={"Razred"} set={props.grade[1]} get={props.grade[0]} ></Dropdown>
+                <Dropdown items={subjects} name={"Predmeti"} set={props.subject[1]} get={props.subject[0]}  ></Dropdown>
+                <Dropdown items={[1, 2, 3]} name={"Težavnost"} set={props.difficulty[1]} get={props.difficulty[0]}  ></Dropdown>
                 </div>
         </div>
     );

@@ -24,7 +24,7 @@ function CollectionMainPage() {
             setCollection(docSnap.data());
             setMax(docSnap.data().cards.length);
         }catch (error) {
-            console.error("Error fetching users:", error);
+            console.error("Napaka pri pridobivanju zbirk:", error);
         }
     }
 
@@ -52,9 +52,9 @@ function CollectionMainPage() {
         return (
             <div className="container mt-5">
                 <div className="alert alert-warning">
-                    <p>You need to be logged in to access this!</p>
+                    <p> Za uporabo se morate prijaviti.</p>
                     <button className="btn btn-primary" onClick={() => navigate("/login")}>
-                        Go to Login
+                        Prijava
                     </button>
                 </div>
             </div>
