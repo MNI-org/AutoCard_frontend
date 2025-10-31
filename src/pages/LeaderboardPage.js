@@ -50,7 +50,7 @@ function LeaderBoardPage() {
     const getRowClass = (idx) => {
         if (idx === 0) return "table-success fw-bold";
         if (idx === 1) return "table-success";
-        if (idx === 2) return "table-info";
+        if (idx === 2) return "table-primary";
         return "";
     }
 

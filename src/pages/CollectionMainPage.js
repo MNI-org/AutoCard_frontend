@@ -14,6 +14,8 @@ function CollectionMainPage() {
     const [collection, setCollection] = useState(null);
     const [index, setIndex] = useState(0);
     const [max, setMax] = useState(0);
+    const [isFinished, setIsFinished] = useState(false);
+    const [percentage, setPercentage] = useState(0);
 
     async function loadCollections() {
         try {
@@ -27,10 +29,20 @@ function CollectionMainPage() {
     }
 
     function next() {
-        setIndex((index + 1) % max);
+        const newIndex = index + 1;
+        const newPercentage = Math.round(((index + 1) / max) * 100);
+
+        setPercentage(newPercentage);
+        setIndex(newIndex);
+
+        if (newIndex >= max) {
+            setIsFinished(true);
+        }
     }
 
     function prev() {
+        if (isFinished) return;
+
         setIndex((index - 1) < 0 ? max - 1 : (index - 1));
     }
 
@@ -68,8 +80,6 @@ function CollectionMainPage() {
             <div className="container my-4">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-
-
                         {collection && (
                             <div className="mb-3">
                                 <div className="d-flex justify-content-between mb-2">
@@ -77,14 +87,14 @@ function CollectionMainPage() {
                                         Karta {index + 1} od {collection.cards?.length || 0}
                                     </small>
                                     <small className="text-muted">
-                                        {Math.round(((index + 1) / (collection.cards?.length || 1)) * 100)}% končano
+                                        {percentage}% končano
                                     </small>
                                 </div>
                                 <div className="progress" style={{height: '8px'}}>
                                     <div
                                         className="progress-bar"
                                         role="progressbar"
-                                        style={{width: `${((index + 1) / (collection.cards?.length || 1)) * 100}%`}}
+                                        style={{width: `${percentage}%`}}
                                         aria-valuenow={index + 1}
                                         aria-valuemin="0"
                                         aria-valuemax={collection.cards?.length || 0}
@@ -93,22 +103,42 @@ function CollectionMainPage() {
                             </div>
                         )}
 
-                        <div className="mb-3">
-                            <select
-                                className="form-select"
-                                value={index}
-                                onChange={(e) => setIndex(parseInt(e.target.value))}
-                            >
-                                {collection?.cards.map((card, i) => (
-                                    <option key={i} value={i}>
-                                        Question {i + 1}: {card.q.substring(0, 50)}{card.q.length > 50 ? '...' : ''}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
                         {collection ? (
-                            <Flashcard card={collection.cards[index]}/>
+                            isFinished ? (
+                                    <div className="text-center my-5 p-4 bg-light rounded shadow">
+                                        <h3 className="fw-bold mb-4 text-primary">
+                                            Čestitke! Končali ste igro.
+                                        </h3>
+                                        <p className="mb-4 text-secondary fs-5">
+                                            Upam da ste se kaj naučili, zdaj po novemu znanju na pot!
+                                        </p>
+                                        <div className="d-flex justify-content-center gap-3">
+                                            <button
+                                                className="btn btn-primary btn-lg"
+                                                onClick={() => navigate("/collections")}
+                                            >
+                                                <i className="bi bi-house-door-fill me-2"></i>
+                                                Nazaj v knjižnico
+                                            </button>
+
+                                            <button
+                                                className="btn btn-secondary btn-lg"
+                                                onClick={() => window.location.reload()}
+                                            >
+                                                <i className="bi bi-arrow-clockwise me-2"></i>
+                                                Igraj ponovno
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                                : collection?.cards?.[index] ? (
+                                    <Flashcard
+                                        card={collection.cards[index]}
+                                        next={next}
+                                    />
+                                ) : (
+                                    <p>No cards available</p>
+                                )
                         ) : (
                             <div className="text-center my-5">
                                 <div className="spinner-border" role="status">
@@ -116,27 +146,6 @@ function CollectionMainPage() {
                                 </div>
                             </div>
                         )}
-
-                        <div className="d-flex justify-content-between align-items-center mt-4">
-                            <button
-                                className="btn btn-outline-primary"
-                                onClick={prev}
-                                disabled={index === 0}
-                            >
-                                <i className="bi bi-arrow-left me-2"></i>
-                                Nazaj
-                            </button>
-
-
-                            <button
-                                className="btn btn-outline-primary"
-                                onClick={next}
-                                disabled={!collection || index === (collection.cards?.length - 1)}
-                            >
-                                Naprej
-                                <i className="bi bi-arrow-right ms-2"></i>
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
