@@ -40,7 +40,7 @@ function Home() {
                                                 <h2 className="mb-4">Pozdravljen{currentUser?.displayName ? `, ${currentUser.displayName}` : ""}!</h2>
                                                 <button
                                                     className="btn btn-primary w-100 mb-2"
-                                                    onClick={() => navigate("/igra")}
+                                                    onClick={() => navigate("/collections")}
                                                 >
                                                     Igraj
                                                 </button>

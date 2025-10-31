@@ -1,23 +1,16 @@
 import React, {useEffect, useState} from "react";
-import { useAuth } from "../contexts/authContext";
-import { useNavigate,useParams } from "react-router-dom";
-import { db } from "../firebase/firebase";
+import {useAuth} from "../contexts/authContext";
+import {useNavigate, useParams} from "react-router-dom";
+import {db} from "../firebase/firebase";
 import {doc, collection, addDoc, getDocs, setDoc} from "firebase/firestore";
 import Collection from "../components/Collection";
 import Search from "../components/Search";
 import Navbar from "../components/Navbar";
 
 function Collections() {
-    const { currentUser, userLogged } = useAuth();
+    const {currentUser, userLogged} = useAuth();
     const navigate = useNavigate();
 
-
-    // const [creator,setCreator] = useState("");
-    // const [grade, setGrade] = useState("");
-    // const [subject, setSubject] = useState("");
-    // const [difficulty, setDifficulty] = useState("");
-    // const [cards, setCards] = useState([{ q: "", a: "", order: 1 }]);
-    // const [status, setStatus] = useState("");
     const [collections, setCollections] = useState([]);
     const [keyword, setKeyword] = useState("");
     const [grade, setGrade] = useState("");
@@ -29,11 +22,6 @@ function Collections() {
         "BIO", "NAR", "TEH", "GOS", "SPO"
     ];
 
-
-
-
-
-
     const loadCollections = async () => {
         try {
             const querySnapshot = await getDocs((collection(db, "collections")));
@@ -41,24 +29,21 @@ function Collections() {
 
             querySnapshot.forEach((doc) => {
                 collections.push({
-                     id: doc.id,
+                    id: doc.id,
                     ...doc.data()
                 });
             });
 
             // console.log(collections);
             setCollections(collections);
-        }catch (error) {
-        console.error("Napaka pri pridobivanju uporabnikov", error);
+        } catch (error) {
+            console.error("Napaka pri pridobivanju uporabnikov", error);
+        }
     }
-    }
-
-
-
 
     useEffect(() => {
         loadCollections();
-    },[])
+    }, [])
 
     if (!userLogged) {
         return (
@@ -77,24 +62,25 @@ function Collections() {
         <>
             <Navbar curr={"collections"}/>
 
-        <div className="container my-4">
-            <div className="row justify-content-center">
-                <div className="col-lg-8">
+            <div className="container my-4">
+                <div className="row justify-content-center">
+                    <div className="col-lg-8">
 
-                    <Search keyword={[keyword,setKeyword]} grade={[grade,setGrade]} subject={[subject,setSubject]} difficulty={[difficulty,setDifficulty]} />
+                        <Search keyword={[keyword, setKeyword]} grade={[grade, setGrade]}
+                                subject={[subject, setSubject]} difficulty={[difficulty, setDifficulty]}/>
 
-                    {collections.map((collection) => (
-                        //checka ce je keyword anywhere in collection
-                        JSON.stringify(collection).toLowerCase().includes(keyword.toLowerCase()) &&
+                        {collections.map((collection) => (
+                            //checka ce je keyword anywhere in collection
+                            JSON.stringify(collection).toLowerCase().includes(keyword.toLowerCase()) &&
                             //check za grade
-                        (grade === "" || collection.grade.toString() === grade) &&
-                        (subject === "" || collection.subject === subject) &&
-                        (difficulty === "" || collection.difficulty.toString() === difficulty) &&
-                        <Collection key={collection.id} data={collection}/>
-                    ))}
+                            (grade === "" || collection.grade.toString() === grade) &&
+                            (subject === "" || collection.subject === subject) &&
+                            (difficulty === "" || collection.difficulty.toString() === difficulty) &&
+                            <Collection key={collection.id} data={collection}/>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     );
 }
