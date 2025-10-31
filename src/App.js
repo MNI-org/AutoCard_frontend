@@ -7,6 +7,7 @@ import CollectionEditor from "./pages/CollectionEditor";
 import Collections from "./pages/Collections";
 import CollectionMainPage from "./pages/CollectionMainPage";
 import Profile from "./pages/Profile"
+import LeaderBoardPage from "./pages/LeaderboardPage";
 
 function App() {
     return (
@@ -21,11 +22,11 @@ function App() {
                     <Route path="/collections" element={<Collections/>}/>
                     <Route path="/learn/:id" element={<CollectionMainPage/>}/>
                     <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/leaderboard" element={<LeaderBoardPage/>}/>
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </Router>
         </AuthProvider>
-
     );
 }
 

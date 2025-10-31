@@ -1,17 +1,13 @@
-import React, {useEffect, useState} from "react";
-import { useAuth } from "../contexts/authContext";
-import { useNavigate,useParams } from "react-router-dom";
-import { db } from "../firebase/firebase";
-import {doc, collection, addDoc, getDoc, setDoc} from "firebase/firestore";
+import React, {useState} from "react";
+import {useAuth} from "../contexts/authContext";
+import {useNavigate} from "react-router-dom";
 import {doSignOut} from "../firebase/auth";
-
-
 
 
 function Navbar(props) {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const navigate = useNavigate();
-    const { currentUser, userLogged } = useAuth();
+    const {currentUser, userLogged} = useAuth();
 
     const handleLogout = async () => {
         try {
@@ -34,8 +30,6 @@ function Navbar(props) {
                 </a>
 
 
-
-
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -47,26 +41,38 @@ function Navbar(props) {
                 <div className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}>
                     <ul className="navbar-nav ms-auto">
 
-                        { userLogged ?
+                        {userLogged ?
                             <>
-                        <li className="nav-item">
-                            <button className={`nav-link ${props.curr==="home" ? "active" :""}`}
-                                    onClick={() => navigate("/")}>
-                                Domov
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button className={`nav-link ${props.curr==="collections" ? "active" :""}`}
-                                    onClick={() => navigate("/collections")}>
-                                Zbirke
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button className={`nav-link ${props.curr==="editor" ? "active" :""}`}
-                                    onClick={() => navigate("/editor")}>
-                                Ustvari
-                            </button>
-                        </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link ${props.curr === "home" ? "active" : ""}`}
+                                            onClick={() => navigate("/")}>
+                                        Domov
+                                    </button>
+                                </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link ${props.curr === "collections" ? "active" : ""}`}
+                                            onClick={() => navigate("/collections")}>
+                                        Zbirke
+                                    </button>
+                                </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link ${props.curr === "editor" ? "active" : ""}`}
+                                            onClick={() => navigate("/editor")}>
+                                        Ustvari
+                                    </button>
+                                </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link ${props.curr === "editor" ? "active" : ""}`}
+                                            onClick={() => navigate("/profile")}>
+                                        Profil
+                                    </button>
+                                </li>
+                                <li className="nav-item">
+                                    <button className={`nav-link ${props.curr === "editor" ? "active" : ""}`}
+                                            onClick={() => navigate("/leaderboard")}>
+                                        Lestvica
+                                    </button>
+                                </li>
                                 <li className="nav-item">
                                     <button className={`nav-link`}
                                             onClick={() => handleLogout()}>
@@ -75,9 +81,9 @@ function Navbar(props) {
                                 </li>
 
                             </>
-                        :
+                            :
                             <li className="nav-item">
-                                <button className={`nav-link ${props.curr==="login" ? "active" :""}`}
+                                <button className={`nav-link ${props.curr === "login" ? "active" : ""}`}
                                         onClick={() => navigate("/login")}>
                                     Prijava
                                 </button>
