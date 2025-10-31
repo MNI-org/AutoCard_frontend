@@ -183,7 +183,7 @@ function Flashcard(props) {
                                         ) : (
                                             '✓ '
                                         )}
-                                        Da (+10 XP)
+                                        Da
                                     </button>
                                     <button
                                         className="btn btn-danger px-4"
