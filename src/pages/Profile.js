@@ -70,7 +70,7 @@ export default function Profile() {
                     <div className="col-lg-8">
                         <ProfileInfo currentUser={currentUser} refreshUser={refreshUser} />
                         <div className="mt-5">
-                            <h2 className="mb-4 fw-bold">Your Collections</h2>
+                            <h2 className="mb-4 fw-bold">Tvoje zbirke</h2>
                             {loadingCollections ? (
                                 <div className="text-center py-5">
                                     <div className="spinner-border text-primary" role="status">

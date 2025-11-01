@@ -58,11 +58,11 @@ export default function ProfileInfo({ currentUser, refreshUser }) {
                 </div>
                 <div className="row mb-3">
                     <div className="col-sm-4"><strong>Level:</strong></div>
-                    <div className="col-sm-8">{currentUser.level || 'Not set'}</div>
+                    <div className="col-sm-8">{currentUser.level || '0'}</div>
                 </div>
                 <div className="row mb-3">
                     <div className="col-sm-4"><strong>XP:</strong></div>
-                    <div className="col-sm-8">{currentUser.xp || 'Not set'}</div>
+                    <div className="col-sm-8">{currentUser.xp || '0'}</div>
                 </div>
 
                 {updateSuccess && (
