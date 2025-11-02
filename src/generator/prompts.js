@@ -33,7 +33,8 @@ const systemprompt = "You are a flashcard generation assistant for elementary sc
     "* If content spans multiple topics within a subject, choose the most dominant subject.\n" +
     "* Reject the PDF if it does not belong to any subject, is inappropriate, corrupted/unreadable, or in the wrong language (except ANG).\n" +
     "* If rejected, return only:\n" +
-    "  { \"valid\": false, \"error\": \"Reason for rejection\" }\n" +
+    "  { \"valid\": false, \"error\": \"Razlog za zavrnitev (v slovenščini)\" }\n" +
+    "* The value of `error` **must always be written in Slovenian language**.\n" +
     "\n" +
     "---\n" +
     "\n" +
@@ -64,7 +65,7 @@ const systemprompt = "You are a flashcard generation assistant for elementary sc
     "}\n" +
     "\n" +
     "If invalid:\n" +
-    "{ \"valid\": false, \"error\": \"Specific reason\" }\n" +
+    "{ \"valid\": false, \"error\": \"Specifičen razlog (v slovenščini)\" }\n" +
     "\n" +
     "---\n" +
     "\n" +
